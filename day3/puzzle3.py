@@ -4,7 +4,7 @@ from functools import reduce
 
 def expand_line(line, position):
     line = line.strip()
-    return line * max(math.ceil((position + 1) / len(line)), 1)
+    return line * math.ceil((position + 1) / len(line))
 
 
 def compute_trees(lines, right, down):
@@ -25,8 +25,7 @@ def compute_trees(lines, right, down):
 
 def compute_trees_from_file(file_name):
     puzzle = open(file_name, "r")
-    lines = [line for line in puzzle.readlines()]
-    return compute_trees(lines, right=3, down=1)
+    return compute_trees([line for line in puzzle.readlines()], right=3, down=1)
 
 
 def product_of_all_slopes(file_name):

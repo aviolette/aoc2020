@@ -1,10 +1,4 @@
-import math
 from functools import reduce
-
-
-def expand_line(line, position):
-    line = line.strip()
-    return line * math.ceil((position + 1) / len(line))
 
 
 def compute_trees(lines, right, down):
@@ -16,8 +10,9 @@ def compute_trees(lines, right, down):
             down_counter += 1
             continue
         down_counter = 1
-        real_line = expand_line(line, position)
-        if real_line[position] == "#":
+        line = line.strip()
+        offset = position % len(line)
+        if line[offset] == "#":
             tree_count += 1
         position += right
     return tree_count

@@ -2,11 +2,15 @@ from typing import Tuple
 
 
 def seat(crazy_seat) -> Tuple[int, int]:
-    def _to_num(seat: str):
+    def _to_num(binaryseat: str):
         acc = 0
-        for i in range(0, len(seat)):
-            exponent = len(seat) - 1 - i
-            acc += pow(2, exponent) if (seat[i] == "B" or seat[i] == "R") else 0
+        for i in range(0, len(binaryseat)):
+            exponent = len(binaryseat) - 1 - i
+            acc += (
+                pow(2, exponent)
+                if (binaryseat[i] == "B" or binaryseat[i] == "R")
+                else 0
+            )
         return acc
 
     return _to_num(crazy_seat[0:7]), _to_num(crazy_seat[7:10])

@@ -2,8 +2,8 @@ from elves import striplines
 
 
 class Bag:
-    def __init__(self, name: str, amount: int, children):
-        self.name = name
+    def __init__(self, enhancer: str, color: str, amount: int, children):
+        self.name = enhancer + " " + color
         self.amount = amount
         self.children = children
 
@@ -19,11 +19,11 @@ def parse_bags(file_name):
             []
             if words[4] == "no"
             else [
-                Bag(words[i + 1] + " " + words[i + 2], int(words[i]), [])
+                Bag(words[i + 1], words[i + 2], int(words[i]), [])
                 for i in range(4, len(words), 4)
             ]
         )
-        bag = Bag(words[0] + " " + words[1], 1, children)
+        bag = Bag(words[0], words[1], 1, children)
         yield bag
 
 
@@ -41,36 +41,24 @@ def _can_contain(bag_name, bag, bags, member):
 
 
 def can_contain(bag_name, bag, bags):
+    if bag.name == bag_name:
+        return False
     return _can_contain(bag_name, bag, bags, set())
 
 
 def bag_combos(file_name, bag_name):
     bags = get_bags(file_name)
-    acc = 0
-    for _, bag in bags.items():
-        if bag.name == bag_name:
-            continue
-        acc += 1 if can_contain(bag_name, bag, bags) else 0
-    return acc
+    return sum(1 if can_contain(bag_name, bag, bags) else 0 for bag in bags.values())
 
 
 def get_bags(file_name):
-    bags = {}
-    for bag in parse_bags(file_name):
-        bags[bag.name] = bag
-    return bags
+    return {bag.name: bag for bag in parse_bags(file_name)}
 
 
 def descend_count(the_bag, bags):
-    acc = 1
-    for bag in the_bag.children:
-        amount = bag.amount
-        child = bags.get(bag.name)
-        if amount > 0:
-            count = descend_count(child, bags)
-            print(f"{count} {child.name} bags")
-            acc += amount * count
-    return acc
+    return 1 + sum(
+        bag.amount * descend_count(bags.get(bag.name), bags) for bag in the_bag.children
+    )
 
 
 def num_bags(file_name, bag_name):
@@ -80,8 +68,8 @@ def num_bags(file_name, bag_name):
 
 
 if __name__ == "__main__":
-    #    print(bag_combos("example7.txt", "shiny gold"))
-    #    print(bag_combos("puzzle7.txt", "shiny gold"))
+    print(bag_combos("example7.txt", "shiny gold"))
+    print(bag_combos("puzzle7.txt", "shiny gold"))
     print(num_bags("example7.txt", "shiny gold"))
     print(num_bags("example71.txt", "shiny gold"))
     print(num_bags("puzzle7.txt", "shiny gold"))

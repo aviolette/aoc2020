@@ -1,17 +1,18 @@
 from typing import Tuple
 
+from elves import striplines
+
 
 def seat(crazy_seat) -> Tuple[int, int]:
     def _to_num(binaryseat: str):
-        acc = 0
-        for i in range(0, len(binaryseat)):
-            exponent = len(binaryseat) - 1 - i
-            acc += (
-                pow(2, exponent)
+        return sum(
+            (
+                pow(2, len(binaryseat) - 1 - i)
                 if (binaryseat[i] == "B" or binaryseat[i] == "R")
                 else 0
             )
-        return acc
+            for i in range(0, len(binaryseat))
+        )
 
     return _to_num(crazy_seat[0:7]), _to_num(crazy_seat[7:10])
 
@@ -22,16 +23,14 @@ def seat_id(crazy_seat):
 
 
 def highest_boarding_pass(file_name):
-    puzzle = open(file_name, "r")
     highest = 0
-    for line in puzzle.readlines():
-        highest = max(seat_id(line.strip()), highest)
+    for line in striplines(file_name):
+        highest = max(seat_id(line), highest)
     return highest
 
 
 def my_boarding_pass(file_name):
-    puzzle = open(file_name, "r")
-    lines = [seat_id(line.strip()) for line in puzzle.readlines()]
+    lines = [seat_id(line) for line in striplines(file_name)]
     lines.sort()
 
     for i in range(1, len(lines) - 1):

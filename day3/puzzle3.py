@@ -1,5 +1,7 @@
 from functools import reduce
 
+from elves import striplines
+
 
 def compute_trees(lines, right, down):
     tree_count = 0
@@ -10,7 +12,6 @@ def compute_trees(lines, right, down):
             down_counter += 1
             continue
         down_counter = 1
-        line = line.strip()
         offset = position % len(line)
         if line[offset] == "#":
             tree_count += 1
@@ -19,13 +20,11 @@ def compute_trees(lines, right, down):
 
 
 def compute_trees_from_file(file_name):
-    puzzle = open(file_name, "r")
-    return compute_trees([line for line in puzzle.readlines()], right=3, down=1)
+    return compute_trees([line for line in striplines(file_name)], right=3, down=1)
 
 
 def product_of_all_slopes(file_name):
-    puzzle = open(file_name, "r")
-    lines = [line for line in puzzle.readlines()]
+    lines = [line for line in striplines(file_name)]
 
     return reduce(
         lambda x, y: x * y,

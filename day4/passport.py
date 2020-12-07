@@ -1,6 +1,6 @@
 import re
 
-from elves import group_lines, striplines
+from elves import group_lines
 
 REQUIRED_FIELDS = {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}
 

@@ -45,19 +45,43 @@ def can_contain(bag_name, bag, bags):
 
 
 def bag_combos(file_name, bag_name):
-    bags = {}
-    for bag in parse_bags(file_name):
-        bags[bag.name] = bag
+    bags = get_bags(file_name)
     acc = 0
     for _, bag in bags.items():
         if bag.name == bag_name:
             continue
-        if can_contain(bag_name, bag, bags):
-            print(f"Can contain {bag.name}")
         acc += 1 if can_contain(bag_name, bag, bags) else 0
     return acc
 
 
+def get_bags(file_name):
+    bags = {}
+    for bag in parse_bags(file_name):
+        bags[bag.name] = bag
+    return bags
+
+
+def descend_count(the_bag, bags):
+    acc = 1
+    for bag in the_bag.children:
+        amount = bag.amount
+        child = bags.get(bag.name)
+        if amount > 0:
+            count = descend_count(child, bags)
+            print(f"{count} {child.name} bags")
+            acc += amount * count
+    return acc
+
+
+def num_bags(file_name, bag_name):
+    bags = get_bags(file_name)
+    the_bag = bags.get(bag_name)
+    return descend_count(the_bag, bags) - 1
+
+
 if __name__ == "__main__":
-    print(bag_combos("example7.txt", "shiny gold"))
-    print(bag_combos("puzzle7.txt", "shiny gold"))
+    #    print(bag_combos("example7.txt", "shiny gold"))
+    #    print(bag_combos("puzzle7.txt", "shiny gold"))
+    print(num_bags("example7.txt", "shiny gold"))
+    print(num_bags("example71.txt", "shiny gold"))
+    print(num_bags("puzzle7.txt", "shiny gold"))

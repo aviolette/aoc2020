@@ -1,6 +1,8 @@
 from functools import reduce
 from typing import List
 
+from elves import striplines
+
 
 def combo_of_2020(nums: List[int]):
     upper = len(nums)
@@ -28,14 +30,20 @@ def three_of_2020(nums: List[int]):
     return None
 
 
-if __name__ == "__main__":
-    puzzle = open("puzzle.txt", "r")
-    nums = [int(line.strip()) for line in puzzle.readlines()]
+def multiple_of_2020(file_name):
+    nums = [int(line) for line in striplines(file_name)]
     nums.sort()
-
     tup = combo_of_2020(nums)
-    print(tup)
-    print(tup[0] * tup[1])
+    return tup[0] * tup[1]
+
+
+def multiples_of_three_of_2020(file_name):
+    nums = [int(line) for line in striplines(file_name)]
+    nums.sort()
     tup = three_of_2020(nums)
-    print(tup)
-    print(reduce(lambda x, y: x * y, tup))
+    return reduce(lambda x, y: x * y, tup)
+
+
+if __name__ == "__main__":
+    print(multiple_of_2020("puzzle.txt"))
+    print(multiples_of_three_of_2020("puzzle.txt"))

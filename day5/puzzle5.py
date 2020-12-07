@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from elves import striplines
+from elves import striplines, stripsort
 
 
 def seat(crazy_seat) -> Tuple[int, int]:
@@ -30,8 +30,7 @@ def highest_boarding_pass(file_name):
 
 
 def my_boarding_pass(file_name):
-    lines = [seat_id(line) for line in striplines(file_name)]
-    lines.sort()
+    lines = stripsort(file_name, seat_id)
 
     for i in range(1, len(lines) - 1):
         prev_seat = lines[i - 1]

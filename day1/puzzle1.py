@@ -1,7 +1,7 @@
 from functools import reduce
 from typing import List
 
-from elves import striplines
+from elves import striplines, stripsort
 
 
 def combo_of_2020(nums: List[int]):
@@ -31,16 +31,12 @@ def three_of_2020(nums: List[int]):
 
 
 def multiple_of_2020(file_name):
-    nums = [int(line) for line in striplines(file_name)]
-    nums.sort()
-    tup = combo_of_2020(nums)
+    tup = combo_of_2020(stripsort(file_name, int))
     return tup[0] * tup[1]
 
 
 def multiples_of_three_of_2020(file_name):
-    nums = [int(line) for line in striplines(file_name)]
-    nums.sort()
-    tup = three_of_2020(nums)
+    tup = three_of_2020(stripsort(file_name, int))
     return reduce(lambda x, y: x * y, tup)
 
 

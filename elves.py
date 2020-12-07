@@ -1,6 +1,5 @@
 def striplines(file_name):
-    file = open(file_name, "r")
-    for line in file.readlines():
+    for line in open(file_name, "r"):
         line = line.strip()
         yield line
 

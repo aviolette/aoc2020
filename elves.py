@@ -1,4 +1,4 @@
-def splitlines(file_name):
+def striplines(file_name):
     file = open(file_name, "r")
     for line in file.readlines():
         line = line.strip()
@@ -7,7 +7,7 @@ def splitlines(file_name):
 
 def group_lines(file_name):
     group = []
-    for line in splitlines(file_name):
+    for line in striplines(file_name):
         if len(line):
             group.append(line)
         else:

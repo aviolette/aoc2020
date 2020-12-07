@@ -23,8 +23,7 @@ def parse_bags(file_name):
                 for i in range(4, len(words), 4)
             ]
         )
-        bag = Bag(words[0], words[1], 1, children)
-        yield bag
+        yield Bag(words[0], words[1], 1, children)
 
 
 def _can_contain(bag_name, bag, bags, member):
@@ -63,8 +62,7 @@ def descend_count(the_bag, bags):
 
 def num_bags(file_name, bag_name):
     bags = get_bags(file_name)
-    the_bag = bags.get(bag_name)
-    return descend_count(the_bag, bags) - 1
+    return descend_count(bags.get(bag_name), bags) - 1
 
 
 if __name__ == "__main__":

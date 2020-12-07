@@ -1,53 +1,37 @@
 from functools import partial
 
 
-def anyone_answers(file_name: str):
-    puzzle = open(file_name, "r")
-    group = set()
-    groups = []
-    for line in puzzle.readlines():
-        line = line.strip()
-        if len(line):
-            for answer in line:
-                group.add(answer)
-        else:
-            groups.append(group)
-            group = set()
-    if group:
-        groups.append(group)
-    return groups
+def anyone_answers(person: str, group_start: bool, group: set):
+    for answer in person:
+        group.add(answer)
+    return group
 
 
-def everyone_answers(file_name):
-    puzzle = open(file_name, "r")
-    group = set()
-    group_start = True
-    groups = []
-    for line in puzzle.readlines():
-        line = line.strip()
-        if len(line):
-            person = set()
-            for answer in line:
-                person.add(answer)
-            if group:
-                group = group.intersection(person)
-            elif group_start:
-                group = person
-            group_start = False
-        else:
-            group_start = True
-            groups.append(group)
-            group = set()
+def everyone_answers(person: str, group_start: bool, group: set):
+    person_answers = {answer for answer in person}
     if group:
-        groups.append(group)
-    return groups
+        return group.intersection(person_answers)
+    elif group_start:
+        return person_answers
+    return group
 
 
 def sum_of_answers(func, file_name: str):
+    puzzle = open(file_name, "r")
+    group = set()
+    group_start = True
     acc = 0
-    for group in func(file_name):
-        acc += len(group)
-    return acc
+    for line in puzzle.readlines():
+        line = line.strip()
+        if len(line):
+            group = func(line, group_start, group)
+            group_start = False
+        else:
+            acc += len(group)
+            group = set()
+            group_start = True
+
+    return len(group) + acc
 
 
 everyone = partial(sum_of_answers, everyone_answers)

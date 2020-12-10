@@ -4,6 +4,11 @@ def striplines(file_name):
         yield line
 
 
+def intlines(filename):
+    for line in striplines(filename):
+        yield int(line)
+
+
 def stripsort(file_name, func):
     lines = [func(line) for line in striplines(file_name)]
     lines.sort()

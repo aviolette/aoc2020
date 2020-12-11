@@ -3,11 +3,6 @@ from collections import defaultdict
 from elves import intlines
 
 
-def make_matrix(num_rows, num_cols, entry_fn):
-    """returns a num_rows x num_cols matrix whose (i,j)th entry is entry_fn(i, j)"""
-    return [[entry_fn(i, j) for j in range(num_cols)] for i in range(num_rows)]
-
-
 def descend(i, tree, stats, tup):
     if not tree[i]:
         return 1
@@ -22,7 +17,7 @@ def descend(i, tree, stats, tup):
     return acc
 
 
-def puzzle_two_two(file_name):
+def puzzle_two(file_name):
     lines = [line for line in intlines(file_name)]
     lines.sort()
     tree = defaultdict(lambda: list())
@@ -59,5 +54,5 @@ if __name__ == "__main__":
     # tup = puzzle_one("puzzle10.txt")
     # print(tup)
     # print(tup[0] * tup[1])
-    puzzle_two_two("example2.txt")
-    puzzle_two_two("puzzle10.txt")
+    puzzle_two("example2.txt")
+    puzzle_two("puzzle10.txt")

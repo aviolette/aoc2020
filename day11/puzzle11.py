@@ -26,11 +26,11 @@ def adjacents(matrix, i, j):
     )
 
 
-def progress(matrix, i, j, max_count, pos_func):
+def progress(matrix, i, j, pos_func):
     count = 0
     inc = 0
     while True:
-        x, y = pos_func(matrix, i, j, inc)
+        x, y = pos_func(i, j, inc)
         if x < 0 or x >= len(matrix) or y < 0 or y >= len(matrix[0]):
             return count
         if (x, y) == (i, j):
@@ -45,72 +45,27 @@ def progress(matrix, i, j, max_count, pos_func):
 
 def seats_in_line_of_site(matrix, i, j, max_seats):
     directions = [
-        lambda m, row, col, inc: (row + inc, col + inc),  # southeast
-        lambda m, row, col, inc: (row + inc, col - inc),  # southwest
-        lambda m, row, col, inc: (row - inc, col + inc),  # northeast
-        lambda m, row, col, inc: (row - inc, col - inc),  # northwest
-        lambda m, row, col, inc: (row - inc, col),  # north
-        lambda m, row, col, inc: (row + inc, col),  # south
-        lambda m, row, col, inc: (row, col + inc),  # east
-        lambda m, row, col, inc: (row, col - inc),  # west
+        lambda row, col, inc: (row + inc, col + inc),  # southeast
+        lambda row, col, inc: (row + inc, col - inc),  # southwest
+        lambda row, col, inc: (row - inc, col + inc),  # northeast
+        lambda row, col, inc: (row - inc, col - inc),  # northwest
+        lambda row, col, inc: (row - inc, col),  # north
+        lambda row, col, inc: (row + inc, col),  # south
+        lambda row, col, inc: (row, col + inc),  # east
+        lambda row, col, inc: (row, col - inc),  # west
     ]
     count = 0
     for direction in directions:
-        count += progress(matrix, i, j, max_seats, direction)
+        count += progress(matrix, i, j, direction)
         if count >= max_seats:
             break
     return count
-
-
-def line_of_site2(matrix, i, j, nw, north, ne, east):
-    key = f"{i},{j}"
-    north_val = Counter()
-    east_val = Counter()
-    nw_val = Counter()
-    ne_val = Counter()
-    if str(j) not in north:
-        north_val = north[str(j)] = Counter([row[j] for row in matrix])
-    if str(i) not in east:
-        east_val = east[str(i)] = Counter([col for col in matrix[i]])
-    if key not in nw:
-        key_set = []
-        value_set = []
-        row = 0
-        for col in range(j, len(matrix[0])):
-            if col < 0 or row < 0:
-                continue
-            key_set.append(f"{row},{col}")
-            value_set.append(matrix[row][col])
-            row = row + 1
-        counter = Counter(value_set)
-        for key in key_set:
-            nw[key] = counter
-    if key not in ne:
-        key_set = []
-        value_set = []
-        row = 0
-        for col in range(j + i, -1, -1):
-            if row < 0:
-                break
-            if col < 0 or col >= len(matrix[0]):
-                continue
-            key_set.append(f"{row},{col}")
-            value_set.append(matrix[row][col])
-            row = row + 1
-        counter = Counter(value_set)
-        for key in key_set:
-            nw[key] = counter
-    return north_val + east_val + nw_val + ne_val
 
 
 def puzzle11_two(file_name):
     lines = [line for line in striplines(file_name)]
     matrix = make_matrix(len(lines), len(lines[0]), lambda i, j: lines[i][j])
     while True:
-        nw = {}
-        north = {}
-        ne = {}
-        east = {}
         matrix2 = deepcopy(matrix)
         occupied_seats = 0
         for i in range(0, len(matrix2)):
@@ -130,15 +85,11 @@ def puzzle11_two(file_name):
                         occupied_seats = occupied_seats - 1
                 if not touched:
                     occupied_seats += 1 if (matrix[i][j] == "#") else 0
-        print_matrix(matrix)
-        print(" ")
         if matrix2 == matrix:
             break
         else:
             matrix = matrix2
-    print(bool(matrix == matrix2))
-    print(occupied_seats)
-    return matrix2
+    return occupied_seats
 
 
 def puzzle11_one(file_name):
@@ -179,16 +130,4 @@ if __name__ == "__main__":
     # puzzle11_one("puzzle11.txt")
     # puzzle11_two("example.txt")
     puzzle11_two("puzzle11.txt")
-    baz = [
-        ["#", ".", "#", "#", ".", "#", "#", ".", "#", "#"],
-        ["#", "#", "#", "#", "#", "#", "#", ".", "#", "#"],
-        ["#", ".", "#", ".", "#", ".", ".", "#", ".", "."],
-        ["#", "#", "#", "#", ".", "#", "#", ".", "#", "#"],
-        ["#", ".", "#", "#", ".", "#", "#", ".", "#", "#"],
-        ["#", ".", "#", "#", "#", "#", "#", ".", "#", "#"],
-        [".", ".", "#", ".", "#", ".", ".", ".", ".", "."],
-        ["#", "#", "#", "#", "#", "#", "#", "#", "#", "#"],
-        ["#", ".", "#", "#", "#", "#", "#", "#", ".", "#"],
-        ["#", ".", "#", "#", "#", "#", "#", ".", "#", "#"],
-    ]
     # print(seats_in_line_of_site(baz, 0, 0, 5))

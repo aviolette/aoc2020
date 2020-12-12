@@ -68,16 +68,16 @@ def puzzle11_two(file_name):
     while True:
         matrix2 = deepcopy(matrix)
         occupied_seats = 0
-        for i in range(0, len(matrix2)):
-            for j in range(0, len(matrix2[i])):
+        for i in range(0, len(matrix)):
+            for j, cell in enumerate(matrix[i]):
                 touched = False
-                if matrix[i][j] == "L":
+                if cell == "L":
                     count = seats_in_line_of_site(matrix, i, j, 1)
                     if count == 0:
                         matrix2[i][j] = "#"
                         occupied_seats = occupied_seats + 1
                         touched = True
-                elif matrix[i][j] == "#":
+                elif cell == "#":
                     count = seats_in_line_of_site(matrix, i, j, 5)
                     if count >= 5:
                         matrix2[i][j] = "L"

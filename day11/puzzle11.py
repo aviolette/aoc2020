@@ -38,8 +38,7 @@ def progress(matrix, i, j, pos_func):
         elif matrix[x][y] == "L":
             return count
         elif matrix[x][y] == "#":
-            count = count + 1
-            return count
+            return count + 1
         inc = inc + 1
 
 

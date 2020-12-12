@@ -26,44 +26,39 @@ def adjacents(matrix, i, j):
     )
 
 
-def seats_in_line_of_site(matrix, i, j, max_seats):
+def progress(matrix, i, j, max_count, pos_func):
     count = 0
-    tmp_count = 0
-    for row in range(0, len(matrix)):
-        if row < i and matrix[row][j] == ".":
-            tmp_count = 0
-        elif i != row and matrix[row][j] == "#":
-            tmp_count = tmp_count + 1
-            if count + tmp_count >= max_seats:
-                return max_seats
-        elif row > i and matrix[row][j] == ".":
-            break
-    count += tmp_count
-    tmp_count = 0
-    for col in range(0, len(matrix[0])):
-        if col < j and matrix[i][col] == ".":
-            tmp_count = 0
-        elif j != col and matrix[i][col] == "#":
-            tmp_count = tmp_count + 1
-            if count + tmp_count > max_seats:
-                return max_seats
-        elif col > j and matrix[i][col] == ".":
-            break
-    count += tmp_count
-    if count >= max_seats:
-        return count
-    x = 0
+    inc = 0
     while True:
-        if x + i >= len(matrix) or x + j >= len(matrix[0]):
-            break
-        if matrix[i + x][x + j] == ".":
-            break
-        elif matrix[x + i][x + j] == "#":
+        x, y = pos_func(matrix, i, j, inc)
+        if x < 0 or x >= len(matrix) or y < 0 or y >= len(matrix[0]):
+            return count
+        if (x, y) == (i, j):
+            pass
+        elif matrix[x][y] == "L":
+            return count
+        elif matrix[x][y] == "#":
             count = count + 1
-            if count >= max_seats:
-                return max_seats
+            return count
+        inc = inc + 1
+
+
+def seats_in_line_of_site(matrix, i, j, max_seats):
+    directions = [
+        lambda m, row, col, inc: (row + inc, col + inc),  # southeast
+        lambda m, row, col, inc: (row + inc, col - inc),  # southwest
+        lambda m, row, col, inc: (row - inc, col + inc),  # northeast
+        lambda m, row, col, inc: (row - inc, col - inc),  # northwest
+        lambda m, row, col, inc: (row - inc, col),  # north
+        lambda m, row, col, inc: (row + inc, col),  # south
+        lambda m, row, col, inc: (row, col + inc),  # east
+        lambda m, row, col, inc: (row, col - inc),  # west
+    ]
+    count = 0
+    for direction in directions:
+        count += progress(matrix, i, j, max_seats, direction)
+        if count >= max_seats:
             break
-        x = x + 1
     return count
 
 
@@ -182,5 +177,18 @@ def puzzle11_one(file_name):
 if __name__ == "__main__":
     #    puzzle11_one("example.txt")
     # puzzle11_one("puzzle11.txt")
-    puzzle11_two("example.txt")
-#    puzzle11_two("puzzle11.txt")
+    # puzzle11_two("example.txt")
+    puzzle11_two("puzzle11.txt")
+    baz = [
+        ["#", ".", "#", "#", ".", "#", "#", ".", "#", "#"],
+        ["#", "#", "#", "#", "#", "#", "#", ".", "#", "#"],
+        ["#", ".", "#", ".", "#", ".", ".", "#", ".", "."],
+        ["#", "#", "#", "#", ".", "#", "#", ".", "#", "#"],
+        ["#", ".", "#", "#", ".", "#", "#", ".", "#", "#"],
+        ["#", ".", "#", "#", "#", "#", "#", ".", "#", "#"],
+        [".", ".", "#", ".", "#", ".", ".", ".", ".", "."],
+        ["#", "#", "#", "#", "#", "#", "#", "#", "#", "#"],
+        ["#", ".", "#", "#", "#", "#", "#", "#", ".", "#"],
+        ["#", ".", "#", "#", "#", "#", "#", ".", "#", "#"],
+    ]
+    # print(seats_in_line_of_site(baz, 0, 0, 5))

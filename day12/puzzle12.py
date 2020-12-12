@@ -12,13 +12,13 @@ def instructions(file_name):
 
 def vector_from_direction(value, angle):
     if angle == 0:
-        return [0, value]
-    if angle == 90:
         return [value, 0]
+    if angle == 90:
+        return [0, value]
     if angle == 270:
-        return [-value, 0]
-    if angle == 180:
         return [0, -value]
+    if angle == 180:
+        return [-value, 0]
 
 
 def manhattan_distance(file_name):

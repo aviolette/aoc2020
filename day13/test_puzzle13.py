@@ -1,4 +1,4 @@
-from day13.puzzle13 import puzzle_two_as_list
+from day13.puzzle13 import chinese_remainder, puzzle_two_as_list
 
 
 def test_puzzle_two_example1():
